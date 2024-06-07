@@ -73,9 +73,9 @@
 
             var url;
             if (userType === "graduate") {
-                url = "GraduateLoginServlet";
+                url = "graduateLoginServlet";
             } else {
-                url = "OtherRolesLoginServlet";
+                url = "otherRolesLoginServlet";
             }
 
             fetch(url, {
@@ -87,11 +87,31 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.code === 0) {
-                        alert("登录成功");
-                        // 在这里添加登录成功后的逻辑，例如跳转到首页
-                    } else {
-                        alert("登录失败: " + data.msg);
+                    switch(data.code) {
+                        case 0:
+                            alert("登录成功");
+                            window.location.href = "00.jsp";
+                            break;
+                        case 1:
+                            alert("错误：无效的用户名或密码");
+                            window.location.href = "01.jsp";
+                            break;
+                        case 2:
+                            alert("错误：账户已锁定");
+                            window.location.href = "02.jsp";
+                            break;
+                        case 3:
+                            alert("错误：账户未激活");
+                            window.location.href = "03.jsp";
+                            break;
+                        case 4:
+                            alert("错误：权限不足");
+                            window.location.href = "04.jsp";
+                            break;
+                        default:
+                            alert("未知错误");
+                            window.location.href = "unknownError.jsp";
+                            break;
                     }
                 })
                 .catch(error => {
