@@ -19,6 +19,7 @@
 
   系统管理员：设置**用户**的角色和权限，设置研究生院管理员和审计管理员
 
+  姓名/学院/导师
 
   1.单输入框查询和按钮(可查询学号/姓名/学院),在本页展现学生信息(以记录的方式展示,一页有10条记录,可以翻页),可以实现模糊查询,
   2.查询所有(只有按钮),在本页列出可查询的学生列表,点击查询跳转到graduateInfo.jsp展现学生信息
@@ -41,10 +42,10 @@
             background-color: #f4f4f4;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 调整这里，使内容靠顶部对齐 */
+            align-items: flex-start;
             height: 100vh;
             margin: 0;
-            padding-top: 20px; /* 添加上内边距 */
+            padding-top: 20px;
         }
 
         .container {
@@ -58,20 +59,33 @@
 
         h1 {
             color: #333;
-            text-align: center; /* 标题居中 */
+            text-align: center;
         }
 
         .search-box {
             margin-bottom: 20px;
-            text-align: center; /* 查询框居中 */
+            text-align: center;
         }
 
-        input[type="text"] {
-            width: 60%;
+        .search-box label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .search-box select, .search-box input[type="text"] {
             padding: 10px;
             margin-right: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            vertical-align: middle;
+        }
+
+        .search-box select {
+            width: auto;
+        }
+
+        .search-box input[type="text"] {
+            width: 50%;
         }
 
         button {
@@ -89,7 +103,7 @@
 
         .action-buttons {
             margin-bottom: 20px;
-            text-align: center; /* 按钮居中 */
+            text-align: center;
         }
 
         .action-buttons button {
@@ -134,17 +148,13 @@
                     document.getElementById("viewAllBtn").style.display = "none";
                     document.getElementById("manageAllBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
-                    document.getElementById("userSearchBtn").style.display = "none";
-                    document.getElementById("viewAllUsersBtn").style.display = "none";
                     break;
                 case "学院研究生秘书":
                     document.getElementById("viewAllBtn").style.display = "none";
-                    document.getElementById("viewAllUsersBtn").style.display = "none";
                     break;
                 case "学院领导":
                     document.getElementById("viewAllBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
-                    document.getElementById("viewAllUsersBtn").style.display = "none";
                     break;
                 case "研究生院管理员":
                     document.getElementById("viewDeptBtn").style.display = "none";
@@ -178,14 +188,15 @@
         });
 
         function search() {
-            var query = document.getElementById("searchInput").value;
+            var queryType = document.getElementById("queryType").value;
+            var queryValue = document.getElementById("searchInput").value;
             // 发起搜索请求，返回结果并在页面展示
             fetch("searchGraduateServlet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ query: query })
+                body: JSON.stringify({ queryType: queryType, queryValue: queryValue })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -214,7 +225,7 @@
             `;
 
             var tbody = resultDiv.querySelector("tbody");
-            data.forEach((record, index) => {
+            data.forEach((record) => {
                 var row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${record.studentId}</td>
@@ -282,76 +293,20 @@
         function addGraduate() {
             window.location.href = "addGraduate.jsp";
         }
-
-        function searchUsers() {
-            // 发起用户查询请求
-            var query = document.getElementById("searchInput").value;
-            fetch("searchUserServlet", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ query: query })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    displayUserResults(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        }
-
-        function displayUserResults(data) {
-            var resultDiv = document.getElementById("results");
-            resultDiv.innerHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>用户ID</th>
-                            <th>用户名</th>
-                            <th>角色</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <div class="pagination"></div>
-            `;
-
-            var tbody = resultDiv.querySelector("tbody");
-            data.forEach((record, index) => {
-                var row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${record.userId}</td>
-                    <td>${record.username}</td>
-                    <td>${record.role}</td>
-                `;
-                tbody.appendChild(row);
-            });
-
-            var pagination = resultDiv.querySelector(".pagination");
-            pagination.innerHTML = createPagination(data.length, 10);
-        }
-
-        function viewAllUsers() {
-            // 发起展示所有非研究生用户请求
-            fetch("viewAllUsersServlet")
-                .then(response => response.json())
-                .then(data => {
-                    displayUserResults(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        }
     </script>
 </head>
 <body>
 <div class="container">
     <h1>研究生管理系统</h1>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="输入学号/姓名/学院">
+        <label for="queryType">查询方式:</label>
+        <select id="queryType">
+            <option value="studentId">学号</option>
+            <option value="name">姓名</option>
+            <option value="college">学院</option>
+            <option value="tutor">导师</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="输入查询内容">
         <button id="searchBtn" onclick="search()">查询</button>
     </div>
     <div class="action-buttons">
@@ -359,8 +314,6 @@
         <button id="manageAllBtn" onclick="manageAll()">管理所有</button>
         <button id="viewDeptBtn" onclick="queryDept()">查询本学院</button>
         <button id="addGraduateBtn" onclick="addGraduate()">添加</button>
-        <button id="userSearchBtn" onclick="searchUsers()">用户查询</button>
-        <button id="viewAllUsersBtn" onclick="viewAllUsers()">展示所有用户</button>
     </div>
     <div id="results" class="results"></div>
 </div>
