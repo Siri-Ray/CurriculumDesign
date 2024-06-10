@@ -128,13 +128,65 @@
 
 （研究生表）学号，密码表，修改时间，上一次登陆尝试时间，尝试登录次数
 
-(管理员表)用户名，密码，用户角色（0-10），学院
+```sql
+CREATE TABLE graduate_students (
+    student_id VARCHAR(20) PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    last_password_change_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_login_attempt_time TIMESTAMP DEFAULT NULL,
+    login_attempt_count INT DEFAULT 0
+);
+
+```
+
+(管理员表)用户名，密码，用户角色，学院
+
+```sql
+CREATE TABLE administrators (
+    username VARCHAR(50) PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    user_role INT NOT NULL,
+    department VARCHAR(100) NOT NULL
+);
+
+```
 
 基础信息表（在大查询时使用）学号，姓名、性别、身份证号、学院、专业、学位类型、导师
 
+```sql
+CREATE TABLE basic_information (
+    student_id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    id_number VARCHAR(18) UNIQUE NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    major VARCHAR(100) NOT NULL,
+    degree_type VARCHAR(50) NOT NULL,
+    supervisor VARCHAR(50) NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES graduate_students(student_id)
+);
+
+```
+
+日志表 
+
+```sql
+CREATE TABLE operation_logs (
+    log_id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL,
+    operation VARCHAR(50) NOT NULL,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    details TEXT,
+    FOREIGN KEY (username) REFERENCES administrators(username)
+);
+
+```
+
+
+
 其他信息表：学号，
 
-日志表/日志txt
+
 
 
 
