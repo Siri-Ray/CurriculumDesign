@@ -620,6 +620,32 @@
 
     // 默认显示第一个tab
     document.getElementsByClassName("tablinks")[0].click();
+
+    // JavaScript 代码
+    document.addEventListener("DOMContentLoaded", function() {
+        // 获取 URL 中的参数 username
+        var urlParams = new URLSearchParams(window.location.search);
+        var username = urlParams.get('username');
+        // 使用 username 从数据库中获取基础信息并填充到页面中
+        fetch('getBasicInfoEndpoint?username=' + username)
+            .then(response => response.json())
+            .then(data => {
+                // 填充基础信息到页面中
+                document.getElementById("studentId").innerText = data.studentId;
+                document.getElementById("name").innerText = data.name;
+                document.getElementById("gender").innerText = data.gender;
+                document.getElementById("idNumber").innerText = data.idNumber;
+                document.getElementById("college").innerText = data.college;
+                document.getElementById("major").innerText = data.major;
+                document.getElementById("degreeType").innerText = data.degreeType;
+                document.getElementById("mentor").innerText = data.mentor;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('获取基础信息失败');
+            });
+    });
+
 </script>
 
 </body>
