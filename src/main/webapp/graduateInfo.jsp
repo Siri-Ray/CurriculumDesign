@@ -91,83 +91,32 @@
             <!-- 基础信息表内容 -->
             <tr>
                 <th>学号</th>
-                <td>XXXXXXXX</td>
+                <td contenteditable="false" id="studentId">XXXXXXXX</td>
                 <th>姓名</th>
-                <td>XXX</td>
+                <td contenteditable="false" id="name">XXX</td>
             </tr>
             <tr>
-                <th>姓名拼音</th>
-                <td>XXX</td>
                 <th>性别</th>
-                <td>男</td>
+                <td contenteditable="false" id="gender">男</td>
+                <th>身份证号</th>
+                <td contenteditable="false" id="idNumber">XXXXXXXXXXXX</td>
             </tr>
             <tr>
-                <th>民族</th>
-                <td>汉族</td>
-                <th>出生日期</th>
-                <td>XXXX-XX-XX</td>
+                <th>学院</th>
+                <td contenteditable="false" id="college">计算机科学与技术学院</td>
+                <th>专业</th>
+                <td contenteditable="false" id="major">软件工程</td>
             </tr>
             <tr>
-                <th>籍贯</th>
-                <td>浙江省</td>
-                <th>政治面貌</th>
-                <td>中共预备党员</td>
-            </tr>
-            <tr>
-                <th>证件类型</th>
-                <td>居民身份证</td>
-                <th>证件号码</th>
-                <td>XXXXXXXXXXXX</td>
-            </tr>
-            <tr>
-                <th>国家地区</th>
-                <td>中国</td>
-                <th>婚姻状况</th>
-                <td>未婚</td>
-            </tr>
-            <tr>
-                <th>出生地</th>
-                <td>浙江省/</td>
-                <th>生源地</th>
-                <td>浙江省/杭州市/西湖区</td>
-            </tr>
-            <tr>
-                <th>家庭地址</th>
-                <td>浙江省/杭州市/西湖区</td>
-                <th>户口所在地详细地址</th>
-                <td>杭州市西湖区留和路288号</td>
-            </tr>
-            <tr>
-                <th>户口所在地邮编</th>
-                <td>XXXXX</td>
-                <th>火车起点站</th>
-                <td>杭州</td>
-            </tr>
-            <tr>
-                <th>火车终点站</th>
-                <td>温州南</td>
-                <th>手机号码</th>
-                <td>12345678901</td>
-            </tr>
-            <tr>
-                <th>校内电子邮箱</th>
-                <td>example@school.com</td>
-                <th>电子邮箱</th>
-                <td>example@example.com</td>
-            </tr>
-            <tr>
-                <th>入党日期</th>
-                <td>XXXX-XX-XX</td>
-                <th>学生标签</th>
-                <td>无</td>
-            </tr>
-            <tr>
-                <th>宿舍号</th>
-                <td>XXX</td>
-                <th>奖励情况</th>
-                <td>无</td>
+                <th>学位类型</th>
+                <td contenteditable="false" id="degreeType">专业学位</td>
+                <th>导师</th>
+                <td contenteditable="false" id="mentor">导师2</td>
             </tr>
         </table>
+        <button onclick="editInfo()">修改</button>
+        <button onclick="cancelEdit()">取消</button>
+        <button onclick="submitInfo()">提交</button>
     </div>
 
     <button class="collapsible">在校信息表</button>
@@ -582,6 +531,60 @@
                 rows[i].style.display = "none";
             }
         }
+    }
+
+    function editInfo() {
+        var cells = document.querySelectorAll("#BasicInfo td[contenteditable]");
+        cells.forEach(cell => {
+            cell.contentEditable = "true";
+            cell.classList.add("editable");
+        });
+    }
+
+    function cancelEdit() {
+        var cells = document.querySelectorAll("#BasicInfo td[contenteditable]");
+        cells.forEach(cell => {
+            cell.contentEditable = "false";
+            cell.classList.remove("editable");
+        });
+    }
+
+    function submitInfo() {
+        var info = {
+            studentId: document.getElementById("studentId").innerText,
+            name: document.getElementById("name").innerText,
+            gender: document.getElementById("gender").innerText,
+            idNumber: document.getElementById("idNumber").innerText,
+            college: document.getElementById("college").innerText,
+            major: document.getElementById("major").innerText,
+            degreeType: document.getElementById("degreeType").innerText,
+            mentor: document.getElementById("mentor").innerText
+        };
+
+        fetch('updateInfoEndpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(info)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('信息更新成功');
+                    var cells = document.querySelectorAll("#BasicInfo td[contenteditable]");
+                    cells.forEach(cell => {
+                        cell.contentEditable = "false";
+                        cell.classList.remove("editable");
+                    });
+                } else {
+                    alert('信息更新失败');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('信息更新失败');
+            });
     }
 
     document.addEventListener("DOMContentLoaded", function() {

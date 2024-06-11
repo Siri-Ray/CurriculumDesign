@@ -90,23 +90,26 @@
                     switch(data.code) {
                         case 0:
                             alert("登录成功");
-                            window.location.href = "00.jsp";
+                            switch(userType) {
+                                case "graduate":
+                                    window.location.href = "graduateInfo.jsp?username=" + username;
+                                    break;
+                                case "auditAdmin":
+                                    window.location.href = "auditLogs.jsp?username=" + username;
+                                    break;
+                                case "systemAdmin":
+                                    window.location.href = "userManagement.jsp?username=" + username;
+                                    break;
+                                default:
+                                    window.location.href = "searchGraduateInfo.jsp?username=" + username;
+                                    break;
+                            }
                             break;
                         case 1:
-                            alert("错误：无效的用户名或密码");
-                            window.location.href = "01.jsp";
+                            alert("错误：无效的用户名或密码，登录失败次数：" + data.failedAttempts);
                             break;
                         case 2:
                             alert("错误：账户已锁定");
-                            window.location.href = "02.jsp";
-                            break;
-                        case 3:
-                            alert("错误：账户未激活");
-                            window.location.href = "03.jsp";
-                            break;
-                        case 4:
-                            alert("错误：权限不足");
-                            window.location.href = "04.jsp";
                             break;
                         default:
                             alert("未知错误");
@@ -137,6 +140,7 @@
         <option value="gradSchoolLeader">研究生院领导</option>
         <option value="schoolLeader">学校领导</option>
         <option value="auditAdmin">审计管理员</option>
+        <option value="systemAdmin">系统管理员</option>
     </select>
     <button onclick="login()">登录</button>
 </div>
