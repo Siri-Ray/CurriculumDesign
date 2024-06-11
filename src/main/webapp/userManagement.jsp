@@ -85,42 +85,38 @@
     <div class="search-box">
         <select id="searchType">
             <option value="username">账号</option>
+            <option value="name">姓名</option>
             <option value="college">学院</option>
-            <option value="role">角色</option>
         </select>
         <input type="text" id="searchInput" placeholder="Enter keyword">
         <button onclick="searchUsers()">查询</button>
         <button onclick="showAllUsers()">展示所有用户</button>
     </div>
     <div id="users" class="users"></div>
+    <div id="pagination" class="pagination"></div>
 </div>
 
 <script>
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
     function searchUsers() {
         var type = document.getElementById("searchType").value;
         var keyword = document.getElementById("searchInput").value;
-        var url = "searchUsersServlet?type=" + type + "&keyword=" + keyword;
-
-        // 如果是模糊查询，则对keyword进行编码
-        if (type === "username" || type === "college" || type === "role") {
-            keyword = encodeURIComponent(keyword);
-        }
-
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                displayUsers(data);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
+        fetchUsers("searchUsersServlet", type, keyword, 1);
     }
 
     function showAllUsers() {
-        fetch("showAllUsersServlet")
+        fetchUsers("showAllUsersServlet", "", "", 1);
+    }
+
+    function fetchUsers(url, type, keyword, page) {
+        var params = new URLSearchParams({ type, keyword, page });
+        fetch(`${url}?${params.toString()}`)
             .then(response => response.json())
             .then(data => {
-                displayUsers(data);
+                displayUsers(data.users);
+                setupPagination(data.total, page);
             })
             .catch(error => {
                 console.error("Error:", error);
@@ -135,8 +131,10 @@
                     <tr>
                         <th>账号</th>
                         <th>密码</th>
+                        <th>姓名</th>
                         <th>学院</th>
                         <th>角色</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,16 +143,38 @@
         `;
 
         var tbody = usersDiv.querySelector("tbody");
-        data.forEach((user, index) => {
+        data.forEach((user) => {
             var row = document.createElement("tr");
             row.innerHTML = `
                 <td>${user.username}</td>
                 <td>${user.password}</td>
+                <td>${user.name}</td>
                 <td>${user.college}</td>
                 <td>${user.role}</td>
+                <td><button onclick="editUser('${user.username}', '${user.password}', '${user.role}', '${user.college}')">修改</button></td>
             `;
             tbody.appendChild(row);
         });
+    }
+
+    function setupPagination(totalItems, currentPage) {
+        var paginationDiv = document.getElementById("pagination");
+        var totalPages = Math.ceil(totalItems / itemsPerPage);
+        paginationDiv.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            var button = document.createElement("button");
+            button.textContent = i;
+            button.onclick = () => fetchUsers(currentUrl, currentType, currentKeyword, i);
+            if (i === currentPage) {
+                button.disabled = true;
+            }
+            paginationDiv.appendChild(button);
+        }
+    }
+
+    function editUser(username, password, role, college) {
+        window.location.href = `editUser.jsp?username=${username}&password=${password}&role=${role}&college=${college}`;
     }
 </script>
 </body>

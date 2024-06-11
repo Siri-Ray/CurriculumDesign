@@ -1,34 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: 86133
-  Date: 2024/6/6
-  Time: 10:49
-  To change this template use File | Settings | File Templates.
-  searchInfo.jsp实现查询信息界面,包括
-
-  研究生：查看，修改部分
-
-  导师：查询查看所有指导
-  学院研究生秘书：查看查询本学院所有，导入，修改基础信息
-  学院领导：查看查询本学院所有，修改基础信息
-  研究生院管理员：审核，管理全校
-  研究生院领导：查询、查看全校
-  学校领导：查询、查看全校
-
-  审计管理员：查看系统的日志信息
-
-  系统管理员：设置**用户**的角色和权限，设置研究生院管理员和审计管理员
-
-  姓名/学院/导师
-
-  1.单输入框查询和按钮(可查询学号/姓名/学院),在本页展现学生信息(以记录的方式展示,一页有10条记录,可以翻页),可以实现模糊查询,
-  2.查询所有(只有按钮),在本页列出可查询的学生列表,点击查询跳转到graduateInfo.jsp展现学生信息
-  3.管理所有按钮,与2.相同,多出的是修改功能。
-  4.查询,修改本学院,在本页列出本学院的学生列表
-  5.添加功能(有添加按钮),点击按钮后,跳转到addGraduate.jsp页面,仅仅秘书有这个功能
-  由于不同角色对应的功能不同,所以把1.单输入框查询和按钮为独立的,查询所有按钮和管理所有按钮和查看查询本学院所有按钮都是放置一起的
-  我希望通过login.jsp的登录后,从Servlet获得不同的data.code,来隐藏改角色没有功能,仅仅保留其有的功能
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -146,42 +115,20 @@
             switch(dataCode) {
                 case "导师":
                     document.getElementById("viewAllBtn").style.display = "none";
-                    document.getElementById("manageAllBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
                     break;
                 case "学院研究生秘书":
-                    document.getElementById("viewAllBtn").style.display = "none";
                     break;
                 case "学院领导":
-                    document.getElementById("viewAllBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
                     break;
                 case "研究生院管理员":
-                    document.getElementById("viewDeptBtn").style.display = "none";
-                    document.getElementById("addGraduateBtn").style.display = "none";
-                    break;
                 case "研究生院领导":
-                    document.getElementById("viewDeptBtn").style.display = "none";
-                    document.getElementById("manageAllBtn").style.display = "none";
-                    document.getElementById("addGraduateBtn").style.display = "none";
-                    break;
                 case "学校领导":
-                    document.getElementById("viewDeptBtn").style.display = "none";
-                    document.getElementById("manageAllBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
                     break;
-                case "审计管理员":
-                    document.getElementById("searchInput").style.display = "none";
-                    document.getElementById("searchBtn").style.display = "none";
+                default:
                     document.getElementById("viewAllBtn").style.display = "none";
-                    document.getElementById("manageAllBtn").style.display = "none";
-                    document.getElementById("viewDeptBtn").style.display = "none";
-                    document.getElementById("addGraduateBtn").style.display = "none";
-                    break;
-                case "系统管理员":
-                    document.getElementById("viewAllBtn").style.display = "none";
-                    document.getElementById("manageAllBtn").style.display = "none";
-                    document.getElementById("viewDeptBtn").style.display = "none";
                     document.getElementById("addGraduateBtn").style.display = "none";
                     break;
             }
@@ -190,24 +137,46 @@
         function search() {
             var queryType = document.getElementById("queryType").value;
             var queryValue = document.getElementById("searchInput").value;
+            var dataCode = "<%=request.getAttribute("dataCode")%>";
+
             // 发起搜索请求，返回结果并在页面展示
             fetch("searchGraduateServlet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ queryType: queryType, queryValue: queryValue })
+                body: JSON.stringify({ queryType: queryType, queryValue: queryValue, dataCode: dataCode })
             })
                 .then(response => response.json())
                 .then(data => {
-                    displayResults(data);
+                    displayResults(data, dataCode);
                 })
                 .catch(error => {
                     console.error("Error:", error);
                 });
         }
 
-        function displayResults(data) {
+        function queryAll() {
+            var dataCode = "<%=request.getAttribute("dataCode")%>";
+
+            // 发起查询所有请求
+            fetch("searchGraduateServlet", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ queryType: "all", queryValue: "", dataCode: dataCode })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displayResults(data, dataCode);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+
+        function displayResults(data, dataCode) {
             var resultDiv = document.getElementById("results");
             resultDiv.innerHTML = `
                 <table>
@@ -215,7 +184,13 @@
                         <tr>
                             <th>学号</th>
                             <th>姓名</th>
+                            <th>性别</th>
+                            <th>身份证号</th>
                             <th>学院</th>
+                            <th>专业</th>
+                            <th>学位类型</th>
+                            <th>导师</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -227,16 +202,41 @@
             var tbody = resultDiv.querySelector("tbody");
             data.forEach((record) => {
                 var row = document.createElement("tr");
+                var buttonsHtml = `<button onclick="viewGraduate('${record.studentId}')">查询</button>`;
+                if (canManage(record, dataCode)) {
+                    buttonsHtml += `<button onclick="editGraduate('${record.studentId}')">修改</button>`;
+                }
                 row.innerHTML = `
                     <td>${record.studentId}</td>
                     <td>${record.name}</td>
+                    <td>${record.gender}</td>
+                    <td>${record.idCard}</td>
                     <td>${record.college}</td>
+                    <td>${record.major}</td>
+                    <td>${record.degreeType}</td>
+                    <td>${record.tutor}</td>
+                    <td>${buttonsHtml}</td>
                 `;
                 tbody.appendChild(row);
             });
 
             var pagination = resultDiv.querySelector(".pagination");
             pagination.innerHTML = createPagination(data.length, 10);
+        }
+
+        function canManage(record, dataCode) {
+            // 根据用户角色和学生记录判断是否可以管理
+            switch (dataCode) {
+                case "学院研究生秘书":
+                case "学院领导":
+                case "研究生院管理员":
+                    return true;
+                case "研究生院领导":
+                case "学校领导":
+                    return false;
+                default:
+                    return false;
+            }
         }
 
         function createPagination(totalItems, itemsPerPage) {
@@ -254,40 +254,12 @@
             console.log("Change to page: " + pageNumber);
         }
 
-        function queryAll() {
-            // 发起查询所有请求
-            fetch("queryAllServlet")
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
+        function viewGraduate(studentId) {
+            window.location.href = `graduateInfo.jsp?studentId=${studentId}`;
         }
 
-        function manageAll() {
-            // 发起管理所有请求
-            fetch("manageAllServlet")
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-        }
-
-        function queryDept() {
-            // 发起查询本学院请求
-            fetch("queryDeptServlet")
-                .then(response => response.json())
-                .then(data => {
-                    displayResults(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
+        function editGraduate(studentId) {
+            window.location.href = `editGraduate.jsp?studentId=${studentId}`;
         }
 
         function addGraduate() {
@@ -304,15 +276,12 @@
             <option value="studentId">学号</option>
             <option value="name">姓名</option>
             <option value="college">学院</option>
-            <option value="tutor">导师</option>
         </select>
         <input type="text" id="searchInput" placeholder="输入查询内容">
         <button id="searchBtn" onclick="search()">查询</button>
     </div>
     <div class="action-buttons">
         <button id="viewAllBtn" onclick="queryAll()">查询所有</button>
-        <button id="manageAllBtn" onclick="manageAll()">管理所有</button>
-        <button id="viewDeptBtn" onclick="queryDept()">查询本学院</button>
         <button id="addGraduateBtn" onclick="addGraduate()">添加</button>
     </div>
     <div id="results" class="results"></div>
