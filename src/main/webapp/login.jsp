@@ -92,7 +92,7 @@
                             alert("登录成功");
                             switch(userType) {
                                 case "graduate":
-                                    window.location.href = "graduateInfo.jsp?username=" + username;
+                                    window.location.href = "graduateInfo.jsp?studentId=" + username;
                                     break;
                                 case "auditAdmin":
                                     window.location.href = "auditLogs.jsp?username=" + username;

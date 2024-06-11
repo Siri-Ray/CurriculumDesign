@@ -625,9 +625,9 @@
     document.addEventListener("DOMContentLoaded", function() {
         // 获取 URL 中的参数 username
         var urlParams = new URLSearchParams(window.location.search);
-        var username = urlParams.get('username');
+        var studentId = urlParams.get('studentId');
         // 使用 username 从数据库中获取基础信息并填充到页面中
-        fetch('getBasicInfoEndpoint?username=' + username)
+        fetch('getBasicInfoEndpoint?studentId=' + studentId)
             .then(response => response.json())
             .then(data => {
                 // 填充基础信息到页面中
