@@ -89,7 +89,6 @@
 研究生：查看，修改部分
 
 
-
 导师：查询查看所有指导
 
 学院研究生秘书：查看查询本学院所有，导入，修改基础信息
@@ -105,10 +104,6 @@
 
 
 审计管理员：查看系统的日志信息
-
-
-
-
 
 系统管理员：设置**用户**的角色和权限，设置研究生院管理员和审计管理员
 
@@ -239,10 +234,18 @@ jwt暂定内容：
 
 ### 1.登陆页面学生/用户登陆接口
 
-```json
+1.登录判断graduateLoginServlet或graduateLoginServlet
+1.1传输的数据
+```json //data
 {
 "username":"admin",
 "password":"123456"
+}
+```
+1.2接收的数据
+```json //data
+{
+"code":"0,1,2,3"
 }
 ```
 
@@ -258,13 +261,23 @@ jwt暂定内容：
 5系统管理员——用户查询界面
 
 ### 修改页面修改密码接口
-
-```json
+1、修改密码changePasswordServlet
+1.1数据传输
+```json //data
 {
-"username":"admin",
-"password":"123456"
+"studentId":"学号",
+"password":"密码",
+"confirmPassword":"确认密码"
 }
 ```
+1.2数据返回
+```json //data
+{
+"success":"1/0",
+"message":""
+}
+```
+
 
 学号，密码
 
@@ -286,29 +299,81 @@ jwt暂定内容：
 
 学号、姓名、性别、身份证号、学院、专业、学位类型、导师
 
-### 研究生信息展示页面查询接口
 
+
+### 研究生信息展示页面查询接口
+1、发起搜索请求searchGraduateServlet
+1.1传输数据
 ```json
 {
-  "studentId": "20210001"
+  "queryType": "studentId/name/college/all",
+  "queryValue": "查询值",
+  "dataCode": "用户类型"
 }
 ```
+queryType是all时,展示所有可查询的学生信息
+
+1.2接收数据
+
+ ```json //data
+ {
+  "studentId": "学号",
+ "name": "姓名",
+ "gender":"性别",
+ "idCard":"学号",
+ "college": "学院",
+ "major": "专业",
+ "degreeType": "学位类型",
+ "tutor": "导师"
+}
+```
+
+
+
+
 
 学号
 
 **基本信息+其他信息（json），若空则提示**
 
 ### 研究生信息展示页面修改接口
+基础信息
 
-基础
-
-```json
-{
-  "studentId": "20210001",
-  "name": "张三",
-  "college": "计算机学院"
+1、修改功能updateInfoEndpoint
+1.1传输数据
+ ```json //info
+ {
+  "studentId": "学号",
+ "name": "姓名",
+ "gender":"性别",
+ "idCard":"学号",
+ "college": "学院",
+ "major": "专业",
+ "degreeType": "学位类型",
+ "tutor": "导师"
 }
 ```
+1.2接收数据
+```json //data
+{
+  "success": ""
+}
+```
+2、获取学生信息getBasicInfoEndpoint
+2.1获取数据
+```json //info
+ {
+  "studentId": "学号",
+ "name": "姓名",
+ "gender":"性别",
+ "idCard":"学号",
+ "college": "学院",
+ "major": "专业",
+ "degreeType": "学位类型",
+ "tutor": "导师"
+}
+```
+
 
 其他信息：
 
@@ -325,8 +390,28 @@ jwt暂定内容：
 成功与否，刷新
 
 ### 信息导入页面添加研究生接口
-
+1、Servlet映射地址addGraduateServlet
+1.1传输的数据格式
+ ```json //formData
+ {
+ "name": "姓名",
+ "gender":"性别",
+ "idCard":"学号",
+ "college": "学院",
+ "major": "专业",
+ "degreeType": "学位类型",
+ "tutor": "导师"
+}
+```
 姓名、性别、身份证号、学院、专业、学位类型、导师
+
+1.2接收的格式
+```json  //data
+{
+"message": "添加的信息", 
+  "success":1 ,
+}
+```
 
 基本信息
 
@@ -334,15 +419,69 @@ jwt暂定内容：
 
 ### 审核页面审核接口2
 
+1、待审核请求获取getPendingReviewsServlet
+1.1接收格式
+ ```json //data
+ {
+  "reviewId": "待审核请求序号",
+ "name": "姓名",
+ "gender":"性别",
+ "idCard":"学号",
+ "college": "学院",
+ "major": "专业",
+ "degreeType": "学位类型",
+ "tutor": "导师"
+}
+```
+
 1.**需要审核的信息（list10条）**返回：待审核id，姓名、性别、身份证号、学院、专业、学位类型、导师
 
 审核通过：id
-
 审核不通过（删除）：id
+2、审查实现reviewGraduateServlet
+2.1传输数据
+ ```json //data
+{
+  "reviewId": "待审核请求序号",
+  "status": "通过/拒绝"
+}
+```
+2.2接收数据
+ ```json //data
+{
+  "reviewId": "待审核请求序号",
+  "message": "", //用于弹窗提示
+  "success": "1或0"
+}
+```
 
+表格
 是否成功
 
 ### 用户管理页面用户分页查询接口
+1、查询功能searchUsersServlet
+1.1 传输数据
+ ```json //data
+{
+  "type": "username/name/college/all",
+  "keyword": "查询值", 
+  "page": "页数"
+}
+```
+1.2返回
+ ```json //data
+{
+  "username": "username",
+  "password": "password", 
+  "name": "name",
+  "college": "college",
+  "role": "role",
+  "total": "数据有几页"
+}
+```
+
+
+
 
 用户id/姓名/.学院 可选
 
@@ -351,7 +490,24 @@ jwt暂定内容：
 用户名，密码，用户角色，学院
 
 ### 用户管理页面用户修改接口
-
+1、修改信息editUserServlet
+1.1传输
+ ```json //data
+{
+  "username": "username",
+  "name": "name",
+  "password": "password",
+  "role": "role",
+  "college": "学院"
+}
+```
+1.2返回
+ ```json //data
+{
+  "success": "1/0",
+  "message": "具体情况"
+}
+```
 密码，用户角色，学院
 
 修改的信息+用户名
@@ -364,6 +520,26 @@ jwt暂定内容：
 
 成功与否
 
+1、添加用户信息addUserServlet
+1.1传输的数据格式
+ ```json //data
+ {
+  "username":"账号",
+ "name": "姓名",
+ "password":"密码",
+  "role": "角色",
+ "college": "学院"
+
+}
+```
+
+1.2接收的格式
+```json  //data
+{
+"message": "添加的信息", 
+  "success":1 
+}
+```
 ### 审计页面日志查询接口
 
 无

@@ -259,7 +259,7 @@
         }
 
         function editGraduate(studentId) {
-            window.location.href = `editGraduate.jsp?studentId=${studentId}`;
+            window.location.href = `graduateInfo.jsp?studentId=${studentId}`;
         }
 
         function addGraduate() {

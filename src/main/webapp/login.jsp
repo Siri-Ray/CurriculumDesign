@@ -75,7 +75,7 @@
             if (userType === "graduate") {
                 url = "graduateLoginServlet";
             } else {
-                url = "otherRolesLoginServlet";
+                url = "graduateLoginServlet";
             }
 
             fetch(url, {
@@ -110,6 +110,14 @@
                             break;
                         case 2:
                             alert("错误：账户已锁定");
+                            break;
+                        case 3:
+                            alert("第一次登录请修改密码");
+                            window.location.href = "changePassword.jsp?studentId=" + username;
+                            break;
+                        case 4:
+                            alert("90天以上未登录请修改密码");
+                            window.location.href = "changePassword.jsp?studentId=" + username;
                             break;
                         default:
                             alert("未知错误");

@@ -1,11 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: 86133
-  Date: 2024/6/6
-  Time: 12:30
-  To change this template use File | Settings | File Templates.
-  changePassword.jsp 实现修改密码的界面
---%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -113,7 +105,41 @@
     function handleSubmit(event) {
       if (!validatePassword()) {
         event.preventDefault();
+        return;
       }
+
+      var studentId = document.getElementById("studentId").value;
+      var password = document.getElementById("newPassword").value;
+      var confirmPassword = document.getElementById("confirmPassword").value;
+
+      var data = {
+        studentId: studentId,
+        password: password,
+        confirmPassword: confirmPassword
+      };
+
+      fetch('changePasswordServlet', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  alert('密码修改成功');
+                  window.location.href = 'login.jsp'; // 成功后重定向到登录页面
+                } else {
+                  document.getElementById("error").textContent = data.message;
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('修改密码失败');
+              });
+
+      event.preventDefault();
     }
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -125,10 +151,10 @@
 <body>
 <div class="container">
   <h1>修改密码</h1>
-  <form id="changePasswordForm" action="changePasswordServlet" method="post">
+  <form id="changePasswordForm">
     <div class="form-group">
       <label for="studentId">学号:</label>
-      <input type="text" id="studentId" name="studentId" value="<%=request.getParameter("username")%>" readonly>
+      <input type="text" id="studentId" name="studentId" value="<%=request.getParameter("studentId")%>" readonly>
     </div>
     <div class="form-group">
       <label for="newPassword">新密码:</label>

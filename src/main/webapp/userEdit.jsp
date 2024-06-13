@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit User</title>
+  <title>编辑用户信息</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -73,10 +73,13 @@
 </head>
 <body>
 <div class="container">
-  <h1>编辑用户</h1>
+  <h1>编辑用户信息</h1>
   <form id="editForm">
     <label for="username">账号:</label>
     <input type="text" id="username" name="username" readonly>
+
+    <label for="name">姓名:</label>
+    <input type="text" id="name" name="name">
 
     <label for="password">密码:</label>
     <input type="text" id="password" name="password">
@@ -107,14 +110,16 @@
   document.addEventListener("DOMContentLoaded", function() {
     var urlParams = new URLSearchParams(window.location.search);
     document.getElementById("username").value = urlParams.get("username");
+    document.getElementById("name").value = urlParams.get("name");
     document.getElementById("password").value = urlParams.get("password");
     document.getElementById("role").value = urlParams.get("role");
     document.getElementById("college").value = urlParams.get("college");
   });
 
   function submitForm() {
-    var formData = {
+    var data = {
       username: document.getElementById("username").value,
+      name: document.getElementById("name").value,
       password: document.getElementById("password").value,
       role: document.getElementById("role").value,
       college: document.getElementById("college").value
@@ -125,7 +130,7 @@
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(data)
     })
             .then(response => response.json())
             .then(data => {
@@ -140,7 +145,7 @@
   }
 
   function goBack() {
-    window.location.href = "UserManagement.jsp";
+    window.location.href = "userManagement.jsp";
   }
 </script>
 </body>

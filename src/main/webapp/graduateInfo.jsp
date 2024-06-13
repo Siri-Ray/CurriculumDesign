@@ -558,7 +558,7 @@
             college: document.getElementById("college").innerText,
             major: document.getElementById("major").innerText,
             degreeType: document.getElementById("degreeType").innerText,
-            mentor: document.getElementById("mentor").innerText
+            tutor: document.getElementById("tutor").innerText
         };
 
         fetch('updateInfoEndpoint', {
@@ -638,7 +638,7 @@
                 document.getElementById("college").innerText = data.college;
                 document.getElementById("major").innerText = data.major;
                 document.getElementById("degreeType").innerText = data.degreeType;
-                document.getElementById("mentor").innerText = data.mentor;
+                document.getElementById("tutor").innerText = data.tutor;
             })
             .catch(error => {
                 console.error('Error:', error);
