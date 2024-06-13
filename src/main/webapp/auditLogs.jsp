@@ -81,6 +81,30 @@
         th {
             background-color: #f2f2f2;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background-color: #0056b3;
+        }
+
+        .pagination .active {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -96,34 +120,63 @@
         <button onclick="showAllLogs()">展示所有日志记录</button>
     </div>
     <div id="logs" class="logs"></div>
+    <div class="pagination" id="pagination"></div>
 </div>
 
 <script>
+    let currentPage = 1; // 当前日志页面
+    const logsPerPage = 10; // 每页日志条数
+
     function searchLogs() {
-        var type = document.getElementById("searchType").value;
-        var keyword = document.getElementById("searchInput").value;
-        fetch("searchLogsServlet?type=" + type + "&keyword=" + keyword)
-            .then(response => response.json())
-            .then(data => {
-                displayLogs(data);
-            })
-            .catch(error => {
-                console.error("Error:", error);
-            });
+        currentPage = 1; // 查询时重置为第一页
+        fetchLogs();
     }
 
     function showAllLogs() {
-        fetch("showAllLogsServlet")
+        currentPage = 1; // 展示所有日志时重置为第一页
+        fetchAllLogs();
+    }
+
+    function fetchAllLogs() {
+        fetch("etchLogsServlet", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ type: "all", keyword: "" ,page: currentPage, perPage: logsPerPage})
+        })
             .then(response => response.json())
             .then(data => {
-                displayLogs(data);
+                displayLogs(data.logs);
+                displayPagination(data.totalPages);
             })
             .catch(error => {
                 console.error("Error:", error);
             });
     }
 
-    function displayLogs(data) {
+    function fetchLogs() {
+        var type = document.getElementById("searchType").value;
+        var keyword = document.getElementById("searchInput").value;
+
+        fetch("fetchLogsServlet", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ type: type, keyword: keyword, page: currentPage, perPage: logsPerPage })
+        })
+            .then(response => response.json())
+            .then(data => {
+                displayLogs(data.logs);
+                displayPagination(data.totalPages);
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    }
+
+    function displayLogs(logs) {
         var logsDiv = document.getElementById("logs");
         logsDiv.innerHTML = `
             <table>
@@ -135,13 +188,13 @@
                         <th>时间</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="logsBody">
                 </tbody>
             </table>
         `;
 
-        var tbody = logsDiv.querySelector("tbody");
-        data.forEach((log, index) => {
+        var tbody = logsDiv.querySelector("#logsBody");
+        logs.forEach(log => {
             var row = document.createElement("tr");
             row.innerHTML = `
                 <td>${log.username}</td>
@@ -152,7 +205,31 @@
             tbody.appendChild(row);
         });
     }
+
+    function displayPagination(totalPages) {
+        var paginationDiv = document.getElementById("pagination");
+        paginationDiv.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            var button = document.createElement("button");
+            button.textContent = i;
+            button.onclick = function() {
+                currentPage = i;
+                fetchLogs();
+            };
+
+            if (i === currentPage) {
+                button.classList.add("active");
+            }
+
+            paginationDiv.appendChild(button);
+        }
+    }
+
+    // 页面加载时初始化
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchLogs();
+    });
 </script>
 </body>
 </html>
-

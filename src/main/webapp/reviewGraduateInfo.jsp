@@ -99,17 +99,17 @@
     fetch("getPendingReviewsServlet")
             .then(response => response.json())
             .then(data => {
-              displayReviews(data);
+              displayReviews(data.items);
             })
             .catch(error => {
               console.error("Error:", error);
             });
   });
 
-  function displayReviews(data) {
+  function displayReviews(items) {
     var tbody = document.getElementById("reviewTable").querySelector("tbody");
     tbody.innerHTML = "";
-    data.forEach((item, index) => {
+    items.forEach((item, index) => {
       var row = document.createElement("tr");
       row.innerHTML = `
                 <td>${item.reviewId}</td>

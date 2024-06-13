@@ -541,7 +541,26 @@ queryType是all时,展示所有可查询的学生信息
 }
 ```
 ### 审计页面日志查询接口
+1、数据传输
+ ```json 
+ {
+  "type":"查询类型:账号/操作/all",
+ "keyword": "查询值",
+ "page":"currentPage",
+ "perPage": "logsPerPage"
 
+}
+```
+2、返回
+ ```json 
+ {
+  "username":"用户名",
+ "operation": "操作",
+ "details":"详情",
+ "timestamp": "时间"
+
+}
+```
 无
 
 **日志列表10条**

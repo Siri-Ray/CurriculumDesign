@@ -149,7 +149,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    displayResults(data, dataCode);
+                    displayResults(data.records, dataCode);
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -169,15 +169,15 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    displayResults(data, dataCode);
+                    displayResults(data.records, dataCode);
                 })
                 .catch(error => {
                     console.error("Error:", error);
                 });
         }
 
-        function displayResults(data, dataCode) {
-            var resultDiv = document.getElementById("results");
+        function displayResults(records, dataCode) {
+            var resultDiv = document.getElementById("records");
             resultDiv.innerHTML = `
                 <table>
                     <thead>
@@ -200,7 +200,7 @@
             `;
 
             var tbody = resultDiv.querySelector("tbody");
-            data.forEach((record) => {
+            records.forEach((record) => {
                 var row = document.createElement("tr");
                 var buttonsHtml = `<button onclick="viewGraduate('${record.studentId}')">查询</button>`;
                 if (canManage(record, dataCode)) {
@@ -221,7 +221,7 @@
             });
 
             var pagination = resultDiv.querySelector(".pagination");
-            pagination.innerHTML = createPagination(data.length, 10);
+            pagination.innerHTML = createPagination(records.length, 10);
         }
 
         function canManage(record, dataCode) {

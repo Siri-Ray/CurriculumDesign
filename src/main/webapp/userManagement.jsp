@@ -125,7 +125,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    displayResults(data);
+                    displayResults(data.users);
                 })
                 .catch(error => {
                     console.error("Error:", error);
@@ -133,12 +133,12 @@
         }
 
         function showAllUsers() {
-            fetch("showAllUsersServlet", {
+            fetch("searchUsersServlet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ queryType: "all", queryValue: "" })
+                body: JSON.stringify({ type: "all", keyword: "" })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -149,8 +149,8 @@
                 });
         }
 
-        function displayResults(data) {
-            var resultDiv = document.getElementById("results");
+        function displayResults(users) {
+            var resultDiv = document.getElementById("users");
             resultDiv.innerHTML = `
                 <table>
                     <thead>
@@ -170,7 +170,7 @@
             `;
 
             var tbody = resultDiv.querySelector("tbody");
-            data.forEach((user) => {
+            users.forEach((user) => {
                 var row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${user.username}</td>
@@ -184,7 +184,7 @@
             });
 
             var pagination = resultDiv.querySelector(".pagination");
-            pagination.innerHTML = createPagination(data.length, 10);
+            pagination.innerHTML = createPagination(users.length, 10);
         }
 
         function createPagination(totalItems, itemsPerPage) {
