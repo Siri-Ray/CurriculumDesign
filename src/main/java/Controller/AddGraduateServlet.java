@@ -10,13 +10,14 @@ import java.io.IOException;
 
 /**
  * @Author itmei
- * @Date 2024/6/10 16:58
+ * @Date 2024/6/12 20:15
  * @description:
- * @Title: Controller.OtherRolesLoginServlet
- * @Package PACKAGE_NAME
+ * @Title: AddGraduateServlet
+ * @Package Controller
  */
 @WebServlet("/")
-public class OtherRolesLoginServlet extends HttpServlet {
+public class AddGraduateServlet extends HttpServlet {
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
 
     }
