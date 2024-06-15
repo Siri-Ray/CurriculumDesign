@@ -20,6 +20,17 @@ import static Dao.BaseDao.select;
  * @Package Dao
  */
 public class UserDao {
+    public int updateUser(User user) throws SQLException {
+        String sql = "UPDATE administrators SET password = ?, user_role = ?, college = ? WHERE username = ?";
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getPassword());
+            stmt.setString(2, user.getUserRole());
+            stmt.setString(3, user.getCollege());
+            stmt.setString(4, String.valueOf(user.getUsername()));
+            return stmt.executeUpdate();
+        }
+    }
     public List<User> searchUserByUsername(String username) throws SQLException {
         return searchUser("username", username);
     }

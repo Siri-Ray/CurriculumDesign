@@ -165,8 +165,8 @@
             });
         }
 
-        function editUser(username, password, role, college) {
-            window.location.href = `editUser.jsp?username=${username}&password=${password}&role=${role}&college=${college}`;
+        function editUser(username, password, user_role, college) {
+            window.location.href = `userEdit.jsp?username=${username}&user_role=${user_role}&college=${college}`;
         }
 
         function addUser() {

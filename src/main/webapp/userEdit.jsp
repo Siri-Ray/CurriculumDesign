@@ -82,8 +82,8 @@
     <label for="password">密码:</label>
     <input type="text" id="password" name="password">
 
-    <label for="role">角色:</label>
-    <select id="role" name="role">
+    <label for="userRole">角色:</label>
+    <select id="userRole" name="userRole">
       <option value="supervisor">导师</option>
       <option value="secretary">学院研究生秘书</option>
       <option value="collegeLeader">学院领导</option>
@@ -109,7 +109,7 @@
     var urlParams = new URLSearchParams(window.location.search);
     document.getElementById("username").value = urlParams.get("username");
     document.getElementById("password").value = urlParams.get("password");
-    document.getElementById("role").value = urlParams.get("role");
+    document.getElementById("userRole").value = urlParams.get("userRole");
     document.getElementById("college").value = urlParams.get("college");
   });
 
@@ -118,7 +118,7 @@
       username: document.getElementById("username").value,
 
       password: document.getElementById("password").value,
-      role: document.getElementById("role").value,
+      userRole: document.getElementById("userRole").value,
       college: document.getElementById("college").value
     };
 

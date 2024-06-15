@@ -111,7 +111,7 @@
                 <th>学位类型</th>
                 <td contenteditable="false" id="degreeType">专业学位</td>
                 <th>导师</th>
-                <td contenteditable="false" id="mentor">导师2</td>
+                <td contenteditable="false" id="supervisor">导师2</td>
             </tr>
         </table>
         <button onclick="editInfo()">修改</button>

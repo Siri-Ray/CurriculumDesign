@@ -13,6 +13,11 @@ public class Log {
     private int logId;
     private String username;
     private String operation;
+    public Log()
+    {}
+    public Log(int logId, String username, String operation, Timestamp timestamp, String details) {
+        this.logId = logId;this.username = username;this.operation = operation;this.timestamp = timestamp;this.details = details;
+    }
 
     @Override
     public String toString() {

@@ -40,7 +40,11 @@ public class SearchGraduateServlet extends HttpServlet {
         try {
             if (type.equals("all")) {
                 infoList = basicInfoDao.getAllBasicInformation();
-            } else {
+
+            } else if(type.equals("studentId")){
+                infoList = basicInfoDao.searchByTypeAndKeyword("student_id", keyword);
+            }
+            else {
                 infoList = basicInfoDao.searchByTypeAndKeyword(type, keyword);
             }
         } catch (SQLException e) {

@@ -1,5 +1,6 @@
 package Controller;
 
+import Dao.LogDao;
 import Dao.UserDao;
 import Models.User;
 import Utils.JsonUtil;
@@ -38,6 +39,9 @@ public class UserAddServlet extends HttpServlet {
         try {
             success = userDao.addUser(user);
             message = success ? "User added successfully" : "Failed to add user";
+            if(success==true){
+                LogDao.addLog(String.valueOf(user.getUsername()),"insert",user.toString());
+            }
         } catch (SQLException e) {
             success = false;
             message = "Database error: " + e.getMessage();

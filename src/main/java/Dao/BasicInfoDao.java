@@ -114,13 +114,13 @@ public class BasicInfoDao {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     basicInformation info = new basicInformation(
-                            rs.getInt("studentId"),
+                            rs.getInt("student_id"),
                             rs.getString("name"),
                             rs.getString("gender"),
-                            rs.getString("idNumber"),
+                            rs.getString("id_number"),
                             rs.getString("college"),
                             rs.getString("major"),
-                            rs.getString("degreeType"),
+                            rs.getString("degree_type"),
                             rs.getString("supervisor")
                     );
                     infoList.add(info);
