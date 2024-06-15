@@ -131,7 +131,7 @@
         }
 
         function showAllUsers() {
-            fetch("searchUser", {
+            fetch("searchUsersServlet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

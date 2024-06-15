@@ -103,4 +103,30 @@ public class BasicInfoDao {
         }
         return infoList;
     }
+
+    public List<basicInformation> searchByTypeAndKeyword(String type, String keyword) throws SQLException {
+        List<basicInformation> infoList = new ArrayList<>();
+        String sql = "SELECT * FROM basic_information WHERE " + type + " LIKE ?";
+
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    basicInformation info = new basicInformation(
+                            rs.getInt("studentId"),
+                            rs.getString("name"),
+                            rs.getString("gender"),
+                            rs.getString("idNumber"),
+                            rs.getString("college"),
+                            rs.getString("major"),
+                            rs.getString("degreeType"),
+                            rs.getString("supervisor")
+                    );
+                    infoList.add(info);
+                }
+            }
+        }
+        return infoList;
+    }
 }

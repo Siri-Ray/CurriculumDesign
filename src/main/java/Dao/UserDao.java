@@ -142,5 +142,21 @@ public class UserDao {
         return users;
     }
 
+    public boolean addUser(User user) throws SQLException {
+        String sql = "INSERT INTO administrators (username, password, user_role, college) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, user.getUsername()); // 假设 username 是 int 类型
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getUserRole());
+            stmt.setString(4, user.getCollege());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        }
+    }
+
 
 }

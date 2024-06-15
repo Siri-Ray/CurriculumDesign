@@ -77,14 +77,11 @@
         <label for="username">用户名:</label>
         <input type="text" id="username" name="username" required>
 
-        <label for="name">姓名:</label>
-        <input type="text" id="name" name="name" required>
-
         <label for="password">密码:</label>
         <input type="password" id="password" name="password" required>
 
-        <label for="role">用户角色:</label>
-        <select id="role" name="role" required>
+        <label for="userRole">用户角色:</label>
+        <select id="userRole" name="userRole" required>
             <option value="supervisor">导师</option>
             <option value="secretary">学院研究生秘书</option>
             <option value="collegeLeader">学院领导</option>
@@ -109,9 +106,8 @@
     function submitForm() {
         var data = {
             username: document.getElementById("username").value,
-            name: document.getElementById("name").value,
             password: document.getElementById("password").value,
-            role: document.getElementById("role").value,
+            userRole: document.getElementById("userRole").value,
             college: document.getElementById("college").value
         };
 
