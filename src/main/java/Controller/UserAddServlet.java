@@ -1,5 +1,7 @@
 package Controller;
 
+import Models.User;
+import Utils.JsonUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,6 +21,8 @@ import java.io.IOException;
 public class UserAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        User user = JsonUtil.parseJsonToEntity(request.getReader(), User.class);
+
 
     }
 }

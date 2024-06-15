@@ -133,7 +133,7 @@
         }
 
         function showAllUsers() {
-            fetch("searchUser", {
+            fetch("searchUsersServlet", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -168,7 +168,7 @@
     `;
 
             var tbody = resultDiv.querySelector("tbody");
-            users.forEach((user) => {
+            users.forEach((user,index) => {
                 var row = document.createElement("tr");
                 row.innerHTML = `
             <td>${user.username}</td>
