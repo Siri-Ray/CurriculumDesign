@@ -13,6 +13,14 @@ public class graduateStudent {
     private int studentId;
     private String password;
 
+    public graduateStudent(String studentId, String password, Timestamp lastPasswordChangeTime, Timestamp lastLoginAttemptTime, int loginAttemptCount) {
+        this.studentId = Integer.parseInt(studentId);this.password = password;this.lastPasswordChangeTime = lastPasswordChangeTime;this.lastLoginAttemptTime = lastLoginAttemptTime;this.loginAttemptCount = loginAttemptCount;
+    }
+
+    public graduateStudent() {
+
+    }
+
     public int getStudentId() {
         return studentId;
     }

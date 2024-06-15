@@ -50,7 +50,7 @@ public class GraduateLoginServlet extends HttpServlet {
                 // Check if login attempt count exceeds the limit
                 if (loginAttemptCount >= 5) {
                     // Update login attempt time and count
-                    graduateStudentDao.updateLoginAttempt(username, loginAttemptCount + 1);
+                    //graduateStudentDao.updateLoginAttempt(username, loginAttemptCount + 1);
 
                     response.getWriter().write("{\"code\": 2, \"msg\": \"Account locked due to too many failed login attempts.\"}");
                     return;
@@ -90,6 +90,11 @@ public class GraduateLoginServlet extends HttpServlet {
             } else {
                 // Update login attempt time and count on failed login
                 graduateStudent student = graduateStudentDao.searchGraduateStudentByUsername(username);
+                if (student.getLoginAttemptCount()>= 5) {
+
+                    response.getWriter().write("{\"code\": 2, \"msg\": \"Account locked due to too many failed login attempts.\"}");
+                    return;
+                }
                 if (student != null) {
                     graduateStudentDao.updateLoginAttempt(username, student.getLoginAttemptCount() + 1);
                     int failedAttempts = student.getLoginAttemptCount() + 1;

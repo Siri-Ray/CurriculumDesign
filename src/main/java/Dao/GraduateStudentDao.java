@@ -62,19 +62,46 @@ public class GraduateStudentDao {
     public void updateLoginAttempt(String username, int loginAttemptCount) throws SQLException {
         // Update the last login attempt time and login attempt count in the database
         String updateQuery = "UPDATE graduate_students SET last_login_attempt_time = CURRENT_TIMESTAMP, login_attempt_count = ? WHERE student_id = ?";
-        query(updateQuery,loginAttemptCount,username);
+
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+            stmt.setInt(1, loginAttemptCount);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+        }
     }
 
     public void resetLoginAttempt(String username) throws SQLException {
         // Reset the login attempt count in the database
         String resetQuery = "UPDATE graduate_students SET login_attempt_count = 0 WHERE student_id = ?";
-        query(resetQuery,username);
+
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(resetQuery)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        }
     }
 
     public graduateStudent searchGraduateStudentByUsername(String username) throws SQLException {
         // Query to find the graduate student by username
         String query = "SELECT * FROM graduate_students WHERE student_id = ?";
-        return select(query, graduateStudent.class,username).get(0);
+
+        try (Connection conn = ConnectionPoolUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new graduateStudent(
+                            rs.getString("student_id"),
+                            rs.getString("password"),
+                            rs.getTimestamp("last_password_change_time"),
+                            rs.getTimestamp("last_login_attempt_time"),
+                            rs.getInt("login_attempt_count")
+                    );
+                }
+            }
+        }
+        return null; // 如果没有找到，返回 null
     }
 
 

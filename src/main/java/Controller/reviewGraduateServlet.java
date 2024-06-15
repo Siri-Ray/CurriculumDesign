@@ -73,7 +73,7 @@ public class reviewGraduateServlet extends HttpServlet {
                     BasicInfoDao basicInfoDao = new BasicInfoDao();
                     basicInfoDao.addBasicInformation(basicInformation);
                     GraduateStudentDao graduateStudentDao = new GraduateStudentDao();
-                    graduateStudentDao.addgraduateStudent(graduateStudent);
+                    result = graduateStudentDao.addgraduateStudent(graduateStudent);
                     message =( result==1 ? "Review approved successfully." : "Failed to approve review.");
                     if(result == 1){
                         verifyDao.deleteById(reviewId);
