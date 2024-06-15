@@ -3,6 +3,7 @@ package Controller;
 import Dao.UserDao;
 import Models.KT;
 import Models.User;
+import Models.VerifyInfo;
 import Utils.JsonUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
@@ -14,7 +15,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static Utils.JsonUtil.toJson;
 
 /**
  * @Author itmei
@@ -51,10 +56,10 @@ public class UserSearchServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        PrintWriter out = response.getWriter();
-        Gson gson = new Gson();
-        String jsonResponse = gson.toJson(users);
-        out.print(jsonResponse);
-        out.flush();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("users", users);
+        String json = toJson(result);
+        response.getWriter().write(json);
     }
 }

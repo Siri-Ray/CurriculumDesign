@@ -78,8 +78,6 @@
     <label for="username">账号:</label>
     <input type="text" id="username" name="username" readonly>
 
-    <label for="name">姓名:</label>
-    <input type="text" id="name" name="name">
 
     <label for="password">密码:</label>
     <input type="text" id="password" name="password">
@@ -110,7 +108,6 @@
   document.addEventListener("DOMContentLoaded", function() {
     var urlParams = new URLSearchParams(window.location.search);
     document.getElementById("username").value = urlParams.get("username");
-    document.getElementById("name").value = urlParams.get("name");
     document.getElementById("password").value = urlParams.get("password");
     document.getElementById("role").value = urlParams.get("role");
     document.getElementById("college").value = urlParams.get("college");
@@ -119,7 +116,7 @@
   function submitForm() {
     var data = {
       username: document.getElementById("username").value,
-      name: document.getElementById("name").value,
+
       password: document.getElementById("password").value,
       role: document.getElementById("role").value,
       college: document.getElementById("college").value
