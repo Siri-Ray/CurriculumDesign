@@ -75,7 +75,7 @@
             if (userType === "graduate") {
                 url = "graduateLoginServlet";
             } else {
-                url = "graduateLoginServlet";
+                url = "otherLoginServlet";
             }
 
             fetch(url, {
@@ -89,6 +89,7 @@
                 .then(data => {
                     switch(data.code) {
                         case 0:
+                            var userType = data.userType; // 获取 userType
                             alert("登录成功");
                             switch(userType) {
                                 case "graduate":

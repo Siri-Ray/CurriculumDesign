@@ -558,7 +558,7 @@
             college: document.getElementById("college").innerText,
             major: document.getElementById("major").innerText,
             degreeType: document.getElementById("degreeType").innerText,
-            tutor: document.getElementById("tutor").innerText
+            supervisor: document.getElementById("supervisor").innerText
         };
 
         fetch('updateInfoEndpoint', {
@@ -638,11 +638,11 @@
                 document.getElementById("college").innerText = data.college;
                 document.getElementById("major").innerText = data.major;
                 document.getElementById("degreeType").innerText = data.degreeType;
-                document.getElementById("tutor").innerText = data.tutor;
+                document.getElementById("supervisor").innerText = data.supervisor;
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('获取基础信息失败');
+                //alert('获取基础信息失败');
             });
     });
 

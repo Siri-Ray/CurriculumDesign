@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Title: UserAddServlet
  * @Package Controller
  */
-@WebServlet("/")
+@WebServlet("/addUserServlet")
 public class UserAddServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {

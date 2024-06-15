@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Title: UserUpdateServlet
  * @Package Controller
  */
-@WebServlet("/")
+@WebServlet("/editUserServlet")
 public class UserUpdateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {

@@ -86,7 +86,7 @@
       var confirmPassword = document.getElementById("confirmPassword").value;
       var errorElement = document.getElementById("error");
 
-      var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[^]{8,16}$/;
 
       if (!passwordRegex.test(password)) {
         errorElement.textContent = "密码必须包含至少8个字符，包括数字、大小字母和特殊字符。";
@@ -114,8 +114,7 @@
 
       var data = {
         studentId: studentId,
-        password: password,
-        confirmPassword: confirmPassword
+        password: password
       };
 
       fetch('changePasswordServlet', {
@@ -127,7 +126,7 @@
       })
               .then(response => response.json())
               .then(data => {
-                if (data.success) {
+                if (data.success==0) {
                   alert('密码修改成功');
                   window.location.href = 'login.jsp'; // 成功后重定向到登录页面
                 } else {

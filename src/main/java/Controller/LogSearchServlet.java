@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Title: LogSearchServlet
  * @Package Controller
  */
-@WebServlet("/")
+@WebServlet("/logServlet")
 public class LogSearchServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {

@@ -15,7 +15,7 @@ import java.io.IOException;
  * @Title: SearchGraduateServlet
  * @Package Controller
  */
-@WebServlet("/")
+@WebServlet("/searchGraduateServlet")
 public class SearchGraduateServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {

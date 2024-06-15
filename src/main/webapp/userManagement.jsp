@@ -133,7 +133,7 @@
         }
 
         function showAllUsers() {
-            fetch("searchUsersServlet", {
+            fetch("searchUser", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -152,58 +152,42 @@
         function displayResults(users) {
             var resultDiv = document.getElementById("users");
             resultDiv.innerHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>账号</th>
-                            <th>密码</th>
-                            <th>姓名</th>
-                            <th>学院</th>
-                            <th>角色</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <div class="pagination"></div>
-            `;
+        <table>
+            <thead>
+                <tr>
+                    <th>账号</th>
+                    <th>密码</th>
+                    <th>学院</th>
+                    <th>角色</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    `;
 
             var tbody = resultDiv.querySelector("tbody");
             users.forEach((user) => {
                 var row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${user.username}</td>
-                    <td>${user.password}</td>
-                    <td>${user.name}</td>
-                    <td>${user.college}</td>
-                    <td>${user.role}</td>
-                    <td><button onclick="editUser('${user.username}', '${user.name}','${user.password}', '${user.role}', '${user.college}')">修改</button></td>
-                `;
+            <td>${user.username}</td>
+            <td>${user.password}</td>
+            <td>${user.college}</td>
+            <td>${user.userRole}</td>
+            <td><button onclick="editUser('${user.username}', '${user.password}', '${user.userRole}', '${user.college}')">修改</button></td>
+        `;
                 tbody.appendChild(row);
             });
-
-            var pagination = resultDiv.querySelector(".pagination");
-            pagination.innerHTML = createPagination(users.length, 10);
         }
 
-        function createPagination(totalItems, itemsPerPage) {
-            var totalPages = Math.ceil(totalItems / itemsPerPage);
-            totalPages = Math.min(totalPages, 10); // 最多10页
-            var paginationHtml = '';
-            for (var i = 1; i <= totalPages; i++) {
-                paginationHtml += `<button onclick="changePage(${i})">${i}</button>`;
-            }
-            return paginationHtml;
+        function editUser(username, password, role, college) {
+            console.log(`Edit user: ${username}, ${password}, ${role}, ${college}`);
         }
 
-        function changePage(pageNumber) {
-            // 实现分页逻辑，这里只是一个示例
-            console.log("Change to page: " + pageNumber);
-        }
 
-        function editUser(username, name,password, role, college) {
-            window.location.href = `editUser.jsp?username=${username}&name=${name}&password=${password}&role=${role}&college=${college}`;
+        function editUser(username,password, role, college) {
+            window.location.href = `editUser.jsp?username=${username}&password=${password}&role=${role}&college=${college}`;
         }
 
         function addUser() {
@@ -218,7 +202,6 @@
         <label for="searchType">查询方式:</label>
         <select id="searchType">
             <option value="username">账号</option>
-            <option value="name">姓名</option>
             <option value="college">学院</option>
         </select>
         <input type="text" id="searchInput" placeholder="输入查询内容">

@@ -2,27 +2,22 @@ package Models;
 
 /**
  * @Author itmei
- * @Date 2024/6/14 18:39
+ * @Date 2024/6/14 23:51
  * @description:
- * @Title: basicInformation
+ * @Title: VerifyInfo
  * @Package Models
  */
-public class basicInformation {
-    private int studentId;
+public class VerifyInfo {
+    private int reviewId;
     private String name;
     private String gender;
     private String idNumber;
     private String college;
-    public basicInformation(){}
-
-    public basicInformation(int studentId, String name, String gender, String idNumber, String college, String major, String degreeType, String supervisor) {
-        this.name = name;this.studentId = studentId;this.gender = gender;this.idNumber = idNumber;this.college = college; this.major = major;this.degreeType = degreeType;this.supervisor = supervisor;
-    }
 
     @Override
     public String toString() {
-        return "basicInformation{" +
-                "studentId=" + studentId +
+        return "VerifyInfo{" +
+                "reviewId=" + reviewId +
                 ", name='" + name + '\'' +
                 ", gender='" + gender + '\'' +
                 ", idNumber='" + idNumber + '\'' +
@@ -33,12 +28,12 @@ public class basicInformation {
                 '}';
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getReviewId() {
+        return reviewId;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setReviewId(int reviewId) {
+        this.reviewId = reviewId;
     }
 
     public String getName() {
@@ -100,4 +95,5 @@ public class basicInformation {
     private String major;
     private String degreeType;
     private String supervisor;
+
 }

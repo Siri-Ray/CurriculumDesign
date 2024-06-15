@@ -115,11 +115,11 @@
                 <td>${item.reviewId}</td>
                 <td>${item.name}</td>
                 <td>${item.gender}</td>
-                <td>${item.idCard}</td>
+                <td>${item.idNumber}</td>
                 <td>${item.college}</td>
                 <td>${item.major}</td>
                 <td>${item.degreeType}</td>
-                <td>${item.tutor}</td>
+                <td>${item.supervisor}</td>
                 <td>
                     <button onclick="approveReview(${item.reviewId})">通过</button>
                     <button onclick="rejectReview(${item.reviewId})">拒绝</button>

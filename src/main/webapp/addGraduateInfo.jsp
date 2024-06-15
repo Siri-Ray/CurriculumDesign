@@ -84,8 +84,8 @@
             <option value="女">女</option>
         </select>
 
-        <label for="idCard">身份证号:</label>
-        <input type="text" id="idCard" name="idCard" required>
+        <label for="idNumber">身份证号:</label>
+        <input type="text" id="idNumber" name="idNumber" required>
 
         <label for="college">学院:</label>
         <input type="text" id="college" name="college" required>
@@ -96,8 +96,8 @@
         <label for="degreeType">学位类型:</label>
         <input type="text" id="degreeType" name="degreeType" required>
 
-        <label for="tutor">导师:</label>
-        <input type="text" id="tutor" name="tutor" required>
+        <label for="supervisor">导师:</label>
+        <input type="text" id="supervisor" name="supervisor" required>
 
         <button type="button" onclick="submitForm()">提交</button>
     </form>
@@ -108,11 +108,11 @@
         var formData = {
             name: document.getElementById("name").value,
             gender: document.getElementById("gender").value,
-            idCard: document.getElementById("idCard").value,
+            idNumber: document.getElementById("idNumber").value,
             college: document.getElementById("college").value,
             major: document.getElementById("major").value,
             degreeType: document.getElementById("degreeType").value,
-            tutor: document.getElementById("tutor").value
+            supervisor: document.getElementById("supervisor").value
         };
 
         fetch("addGraduateServlet", {
@@ -125,7 +125,7 @@
             .then(response => response.json())
             .then(data => {
                 alert(data.message);
-                if (data.success) {
+                if (data.code == 0) {
                     document.getElementById("addGraduateForm").reset();
                 }
             })

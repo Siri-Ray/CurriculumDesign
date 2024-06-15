@@ -210,11 +210,11 @@
                     <td>${record.studentId}</td>
                     <td>${record.name}</td>
                     <td>${record.gender}</td>
-                    <td>${record.idCard}</td>
+                    <td>${record.idNumber}</td>
                     <td>${record.college}</td>
                     <td>${record.major}</td>
                     <td>${record.degreeType}</td>
-                    <td>${record.tutor}</td>
+                    <td>${record.supervisor}</td>
                     <td>${buttonsHtml}</td>
                 `;
                 tbody.appendChild(row);

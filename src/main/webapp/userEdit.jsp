@@ -86,14 +86,14 @@
 
     <label for="role">角色:</label>
     <select id="role" name="role">
-      <option value="导师">导师</option>
-      <option value="学院研究生秘书">学院研究生秘书</option>
-      <option value="学院领导">学院领导</option>
-      <option value="研究生院管理员">研究生院管理员</option>
-      <option value="研究生院领导">研究生院领导</option>
-      <option value="学校领导">学校领导</option>
-      <option value="审计管理员">审计管理员</option>
-      <option value="系统管理员">系统管理员</option>
+      <option value="supervisor">导师</option>
+      <option value="secretary">学院研究生秘书</option>
+      <option value="collegeLeader">学院领导</option>
+      <option value="graduateAdmin">研究生院管理员</option>
+      <option value="graduateLeader">研究生院领导</option>
+      <option value="schoolLeader">学校领导</option>
+      <option value="auditAdmin">审计管理员</option>
+      <option value="systemAdmin">系统管理员</option>
     </select>
 
     <label for="college">学院:</label>
