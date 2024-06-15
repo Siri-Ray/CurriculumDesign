@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,13 +23,14 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 800px;
+            width: 90%;
+            max-width: 1200px;
         }
 
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .search-box {
@@ -98,13 +100,9 @@
             background-color: #f2f2f2;
         }
 
-        .pagination {
-            display: flex;
-            justify-content: center;
-        }
-
-        .pagination button {
-            margin: 0 5px;
+        .button-disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
     </style>
     <script>
@@ -150,43 +148,24 @@
         }
 
         function displayResults(users) {
-            var resultDiv = document.getElementById("users");
-            resultDiv.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>账号</th>
-                    <th>密码</th>
-                    <th>学院</th>
-                    <th>角色</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    `;
-
-            var tbody = resultDiv.querySelector("tbody");
-            users.forEach((user) => {
+            var tbody = document.getElementById("userTable").querySelector("tbody");
+            tbody.innerHTML = "";
+            users.forEach((user, index) => {
                 var row = document.createElement("tr");
                 row.innerHTML = `
-            <td>${user.username}</td>
-            <td>${user.password}</td>
-            <td>${user.college}</td>
-            <td>${user.userRole}</td>
-            <td><button onclick="editUser('${user.username}', '${user.password}', '${user.userRole}', '${user.college}')">修改</button></td>
-        `;
+                    <td>${user.username}</td>
+                    <td>${user.password}</td>
+                    <td>${user.college}</td>
+                    <td>${user.userRole}</td>
+                    <td>
+                        <button onclick="editUser('${user.username}', '${user.password}', '${user.userRole}', '${user.college}')">修改</button>
+                    </td>
+                `;
                 tbody.appendChild(row);
             });
         }
 
         function editUser(username, password, role, college) {
-            console.log(`Edit user: ${username}, ${password}, ${role}, ${college}`);
-        }
-
-
-        function editUser(username,password, role, college) {
             window.location.href = `editUser.jsp?username=${username}&password=${password}&role=${role}&college=${college}`;
         }
 
@@ -211,7 +190,20 @@
         <button id="showAllUsersBtn" onclick="showAllUsers()">展示所有用户</button>
         <button id="addUserBtn" onclick="addUser()">添加用户</button>
     </div>
-    <div id="results" class="results"></div>
+    <table id="userTable">
+        <thead>
+        <tr>
+            <th>账号</th>
+            <th>密码</th>
+            <th>学院</th>
+            <th>角色</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 动态生成 -->
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
