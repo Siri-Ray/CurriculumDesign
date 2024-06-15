@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>研究生信息查询</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
@@ -22,13 +24,14 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 800px;
+            width: 90%;
+            max-width: 1200px;
         }
 
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .search-box {
@@ -132,6 +135,8 @@
                     document.getElementById("addGraduateBtn").style.display = "none";
                     break;
             }
+
+            showAllGraduates(); // 自动展示所有研究生信息
         });
 
         function search() {
@@ -145,7 +150,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ queryType: queryType, queryValue: queryValue, dataCode: dataCode })
+                body: JSON.stringify({ queryType: queryType, queryValue: queryValue })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -156,7 +161,7 @@
                 });
         }
 
-        function queryAll() {
+        function showAllGraduates() {
             var dataCode = "<%=request.getAttribute("dataCode")%>";
 
             // 发起查询所有请求
@@ -165,7 +170,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ queryType: "all", queryValue: "", dataCode: dataCode })
+                body: JSON.stringify({ queryType: "all", queryValue: "" })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -177,29 +182,8 @@
         }
 
         function displayResults(records, dataCode) {
-            var resultDiv = document.getElementById("records");
-            resultDiv.innerHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>学号</th>
-                            <th>姓名</th>
-                            <th>性别</th>
-                            <th>身份证号</th>
-                            <th>学院</th>
-                            <th>专业</th>
-                            <th>学位类型</th>
-                            <th>导师</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <div class="pagination"></div>
-            `;
-
-            var tbody = resultDiv.querySelector("tbody");
+            var tbody = document.getElementById("graduateTable").querySelector("tbody");
+            tbody.innerHTML = "";
             records.forEach((record) => {
                 var row = document.createElement("tr");
                 var buttonsHtml = `<button onclick="viewGraduate('${record.studentId}')">查询</button>`;
@@ -220,7 +204,7 @@
                 tbody.appendChild(row);
             });
 
-            var pagination = resultDiv.querySelector(".pagination");
+            var pagination = document.querySelector(".pagination");
             pagination.innerHTML = createPagination(records.length, 10);
         }
 
@@ -281,10 +265,29 @@
         <button id="searchBtn" onclick="search()">查询</button>
     </div>
     <div class="action-buttons">
-        <button id="viewAllBtn" onclick="queryAll()">查询所有</button>
+        <button id="viewAllBtn" onclick="showAllGraduates()">查询所有</button>
         <button id="addGraduateBtn" onclick="addGraduate()">添加</button>
     </div>
-    <div id="results" class="results"></div>
+    <div id="results" class="results">
+        <table id="graduateTable">
+            <thead>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>身份证号</th>
+                <th>学院</th>
+                <th>专业</th>
+                <th>学位类型</th>
+                <th>导师</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="pagination"></div>
+    </div>
 </div>
 </body>
 </html>
