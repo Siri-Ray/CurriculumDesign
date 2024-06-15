@@ -142,7 +142,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    displayResults(data);
+                    displayResults(data.users);
                 })
                 .catch(error => {
                     console.error("Error:", error);
